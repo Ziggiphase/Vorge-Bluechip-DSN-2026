@@ -1,0 +1,85 @@
+Project Summary: Task A (User Modeling & Review Simulation)
+
+1. Accomplishments to Date
+
+Phase 1: Data Engineering & "Power User" Extraction
+
+We implemented a "Filter First, Join Second" strategy to handle the Yelp dataset (7M+ reviews) efficiently in a constrained RAM environment.
+
+Criteria: Filtered for "Power Users" with $\ge$ 15 reviews.
+
+Result: Created a high-signal subset of 500 users.
+
+Join Logic: Successfully mapped User metadata (Elite status, avg ratings) with Business context (attributes, categories) and historical Review text.
+
+Phase 2: Behavioral & Linguistic Persona Engine
+
+We built a logic engine that extracts a "Human DNA" profile from raw data, focusing on Dynamic Domain Adaptation:
+
+Behavioral DNA: Calculates "Harshness Percentile," Rating Distribution, and "Deal-Breakers."
+
+Linguistic DNA: Analyzes sentence complexity and emotional intensity.
+
+Disentanglement: Implemented filtering to remove source-domain "leakage" (e.g., ensuring a user doesn't call a mobile app a "place" just because their history is from restaurants).
+
+Phase 3: Multi-Model Adversarial Workflow (The Brain)
+
+We transitioned to a Generative vs. Discriminative architecture using a modular adapter pattern:
+
+The Generator: Utilizes qwen/qwen3-32b at a high temperature (1.15) to maximize creative risk-taking and mimic human "noise."
+
+The Discriminator: Utilizes llama-3.3-70b-versatile at zero temperature (0.0) for strict logical auditing and "AI artifact" detection.
+
+The Refiner: A corrective loop where the Generator rewrite logic is guided by the Discriminator’s specific critique (Chain-of-Thought).
+
+Phase 4: Cultural Implementation (The Nigerian Edge)
+
+Style Transfer: Integrated few-shot naturalization using real Nigerian tech review patterns.
+
+Nuance Mapping: Established rules for translating Yelp-based sentiment into local expressions (e.g., "Standard," "It try," "Not it at all").
+
+2. Production Roadmap (Google Cloud Deployment)
+
+To transition this logic from a notebook to a live, hosted environment, the following architectural steps are planned:
+
+I. Data Persistence (Google Firestore)
+
+Migration: Move the 500 filtered User Persona objects into Firestore.
+
+Optimization: Use document IDs mapped to user_id for millisecond retrieval times, replacing slow JSON lookups.
+
+II. Backend Service (FastAPI)
+
+API Structure: A FastAPI server will wrap the Adversarial Workflow.
+
+Asynchronous Processing: Implement async workers to handle the multi-step LLM calls (Generator -> Discriminator -> Refiner) without blocking the main thread.
+
+Security: Utilize Environment Variables for API keys (Groq/Gemini).
+
+III. Frontend Interface (The Simulator Dashboard)
+
+Persona Browser: A UI to browse the 500 "Human DNA" profiles.
+
+Interactive Console: Inputs for Product Name and Attributes.
+
+The "Internal Monologue" Display: A dedicated section showing the agent's reasoning process before the final review appears.
+
+Adversarial Logs: A live feed showing the Discriminator’s critique and the subsequent refinement steps.
+
+IV. Hosting & Scaling (Cloud Run)
+
+Containerization: Package the backend into a Docker container.
+
+Serverless Deployment: Deploy to Google Cloud Run for automatic scaling and cost-efficiency.
+
+CI/CD: Connect the GitHub repository for automated deployment pipelines.
+
+3. Evaluation Metrics
+
+We will continue to validate the system using:
+
+Fidelity Score: The probability of a simulation being identified as "Real" by the 70B Discriminator.
+
+Rating Delta: The variance between predicted_rating and the business's average, adjusted by the user's historical bias.
+
+Linguistic Diversity: Measuring the reduction in "Standard AI" phrasing through the high-temperature generative approach.

@@ -1,0 +1,47 @@
+:root {
+  --bg-dark: #121418;       /* Deep Charcoal */
+  --bg-card: #1c1f26;       /* Slightly lighter charcoal */
+  --bg-card-hover: #242830;
+  
+  --accent-primary: #FFC107; /* Bumble Amber/Gold for Human warmth */
+  --accent-secondary: #651FFF; /* Violet for AI Synthesis */
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  
+  --success-green: #10B981;  /* Trust Green */
+  --warning-gold: #F59E0B;
+  
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  
+  --shadow-glow: 0 0 25px rgba(255, 193, 7, 0.2);
+  --shadow-card: 0 10px 40px rgba(0,0,0,0.4);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--bg-card-hover);
+  border-radius: 4px;
+}
