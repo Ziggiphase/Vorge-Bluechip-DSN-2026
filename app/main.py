@@ -64,12 +64,13 @@ def get_users(limit: int = 500, skip: int = 0):
 @app.post("/api/simulate")
 def simulate_review(req: SimulationRequest):
     """Runs the adversarial workflow for a given user and product."""
-    if not req.api_key:
-        raise HTTPException(status_code=400, detail="Groq API Key is required")
+    api_key = req.api_key or os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=400, detail="Groq API Key is required (via UI or server ENV)")
         
     try:
         engine = UserPersonaEngine(req.user_id, raw_data)
-        client = GroqAgentClient(api_key=req.api_key)
+        client = GroqAgentClient(api_key=api_key)
         workflow = UserModelingWorkflow(client)
         
         result = workflow.run_simulation(engine, req.product_name, req.product_attributes)
@@ -98,12 +99,13 @@ class RecommendRequest(BaseModel):
 @app.post("/api/recommend")
 def get_recommendations(req: RecommendRequest):
     """Runs the Task B recommendation workflow."""
-    if not req.api_key:
-        raise HTTPException(status_code=400, detail="Groq API Key is required")
+    api_key = req.api_key or os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=400, detail="Groq API Key is required (via UI or server ENV)")
         
     try:
         engine = UserPersonaEngine(req.user_id, raw_data)
-        client = GroqAgentClient(api_key=req.api_key)
+        client = GroqAgentClient(api_key=api_key)
         recommender = RecommendationEngine(client)
         
         result = recommender.generate_recommendations(engine)

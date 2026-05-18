@@ -48,6 +48,10 @@ function App() {
     }
   };
 
+  const skipApiKey = () => {
+    setShowApiModal(false);
+  };
+
   const handleSelectPersona = async (p) => {
     setSelectedPersona(p);
     
@@ -68,10 +72,7 @@ function App() {
       const response = await fetch(`${API_BASE}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: p.user_id,
-          api_key: apiKey
-        })
+        body: JSON.stringify({ user_id: p.user_id, api_key: apiKey || '' })
       });
       
       const data = await response.json();
@@ -92,8 +93,6 @@ function App() {
 
   const triggerSimulation = async (product_name, product_attrs) => {
     setActiveTab('taskA');
-    if (!selectedPersona || !product_name || !apiKey) return;
-    
     setIsSimLoading(true);
     setSimulation(null);
     setDna(null);
@@ -104,11 +103,11 @@ function App() {
       const response = await fetch(`${API_BASE}/simulate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: selectedPersona.user_id,
+        body: JSON.stringify({ 
+          user_id: selectedPersona.user_id, 
           product_name: product_name,
           product_attributes: product_attrs,
-          api_key: apiKey
+          api_key: apiKey || ''
         })
       });
       
@@ -143,17 +142,20 @@ function App() {
   return (
     <div className="app-container">
       {showApiModal && (
-        <div className="api-key-modal">
-          <div className="api-key-content">
-            <h3>🔑 Groq API Key</h3>
-            <p>Enter your Groq key to power the Foyce Engine.</p>
+        <div className="api-modal-overlay">
+          <div className="api-modal">
+            <h2>Welcome to Vorge</h2>
+            <p>To use the Neural Pipeline, please enter your Groq API Key.</p>
             <input 
               type="password" 
+              placeholder="gsk_..."
               value={apiKey}
               onChange={(e) => setApiKey(e.target.value)}
-              placeholder="gsk_..."
             />
-            <button onClick={saveApiKey}>Initialize System</button>
+            <div style={{display: 'flex', gap: '10px'}}>
+              <button onClick={saveApiKey} style={{flex: 1}}>Save & Start</button>
+              <button onClick={skipApiKey} style={{background: 'transparent', border: '1px solid #555', color: '#fff'}}>Skip (Use Server Key)</button>
+            </div>
           </div>
         </div>
       )}
