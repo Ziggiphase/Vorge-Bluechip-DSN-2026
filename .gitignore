@@ -20,3 +20,9 @@ pdf_text.txt
 *.pdf
 *.csv
 .gemini/
+
+# Scratchpads & Notebooks
+scratch.py
+to_be_revamped.py
+*.ipynb
+
