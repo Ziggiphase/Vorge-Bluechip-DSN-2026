@@ -13,5 +13,10 @@ dist/
 frontend/dist/
 .DS_Store
 
-# Data (if you want to exclude the large JSON, uncomment the line below)
+# Data and drafts
 # task_a_filtered_data.json
+stuff.txt
+pdf_text.txt
+*.pdf
+*.csv
+.gemini/
