@@ -1,5 +1,6 @@
 .app-container {
   min-height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-main);
@@ -19,6 +20,18 @@
   top: 0;
   z-index: 100;
   transition: background-color 0.3s;
+}
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo img {
+  height: 36px;
+  width: 36px;
+  object-fit: contain;
 }
 
 .top-nav h1 {
@@ -285,42 +298,109 @@
   opacity: 0.8;
 }
 
-/* BUSINESS FOOTER */
+/* BUSINESS MEGA FOOTER */
 .business-footer {
   margin-top: auto;
   border-top: 1px solid var(--border-color);
-  padding: 40px 60px;
+  padding: 60px 40px;
   background-color: var(--bg-card);
   display: flex;
   justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 40px;
 }
 
-.footer-brand h3 {
-  margin: 0 0 8px 0;
-  font-size: 1.5rem;
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 300px;
+}
+
+.footer-col h3, .footer-col h4 {
+  margin: 0;
+  color: var(--text-primary);
   font-weight: 800;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
 }
 
-.footer-brand p {
+.footer-col h4 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.footer-col p {
   margin: 0;
   color: var(--text-secondary);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
-.footer-contact {
-  text-align: right;
-}
-
-.footer-contact p {
-  margin: 0 0 4px 0;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-
-.footer-contact strong {
+.footer-col strong {
   color: var(--text-primary);
+}
+
+.footer-col a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+  font-weight: 500;
+}
+
+.footer-col a:hover {
+  color: var(--accent-primary);
+}
+
+.copyright {
+  margin-top: 16px !important;
+  font-size: 0.85rem !important;
+  opacity: 0.7;
+}
+
+/* RESPONSIVE MEDIA QUERIES */
+@media (max-width: 900px) {
+  .top-nav {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 16px 20px;
+    gap: 16px;
+  }
+  
+  .nav-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  
+  .page-view {
+    padding: 30px 20px;
+  }
+  
+  .home-hero h1 {
+    font-size: 2.8rem;
+  }
+  
+  .business-footer {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+  
+  .footer-col {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .page-header h2 {
+    font-size: 2rem;
+  }
+  
+  .persona-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .home-hero h1 {
+    font-size: 2.2rem;
+  }
 }

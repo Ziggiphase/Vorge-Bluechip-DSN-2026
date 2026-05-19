@@ -140,7 +140,10 @@ function App() {
     <div className="app-container">
       {/* Top Navigation */}
       <header className="top-nav">
-        <h1>Vorge.</h1>
+        <div className="brand-logo">
+          <img src="/logo.png" alt="Vorge Logo" />
+          <h1>Vorge.</h1>
+        </div>
         <div className="nav-tabs">
           <button className={`nav-tab ${activeTab === 'home' ? 'active' : ''}`} onClick={() => setActiveTab('home')}>Home</button>
           <button className={`nav-tab ${activeTab === 'pool' ? 'active' : ''}`} onClick={() => setActiveTab('pool')}>The Mind Pool</button>
@@ -284,15 +287,30 @@ function App() {
         </div>
       )}
 
-      {/* Business Footer */}
+      {/* Business Mega Footer */}
       <footer className="business-footer">
-        <div className="footer-brand">
-          <h3>Vorge.</h3>
-          <p>Designed by Team Ziggiphase.</p>
+        <div className="footer-col">
+          <div className="brand-logo" style={{marginBottom: '16px'}}>
+            <img src="/logo.png" alt="Vorge Logo" />
+            <h3>Vorge.</h3>
+          </div>
+          <p>Predictive Human Emulation for the Modern Enterprise.</p>
+          <p className="copyright">&copy; 2026 Team Ziggiphase. All Rights Reserved.</p>
         </div>
-        <div className="footer-contact">
-          <p><strong>WhatsApp:</strong> +2348117491902</p>
+        
+        <div className="footer-col">
+          <h4>Platform</h4>
+          <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('home'); }}>Home</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('pool'); }}>The Mind Pool</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('taskB'); }}>Recommender</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab('taskA'); }}>Simulator</a>
+        </div>
+        
+        <div className="footer-col">
+          <h4>Contact Us</h4>
+          <p><strong>WhatsApp:</strong> +234 811 749 1902</p>
           <p><strong>Email:</strong> bellobasit790@gmail.com</p>
+          <p><strong>Location:</strong> Lagos, Nigeria</p>
         </div>
       </footer>
     </div>

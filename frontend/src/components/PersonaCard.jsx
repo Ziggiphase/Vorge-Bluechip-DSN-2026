@@ -11,25 +11,28 @@ const getAvatarId = (id) => {
   return (Math.abs(hash) % 500) + 1;
 };
 
-export default function PersonaCard({ persona, onClick }) {
+export default function PersonaCard({ persona, isSelected, onClick }) {
   const { user_id, name, avg_stars, review_count, is_elite } = persona;
   
   return (
-    <div className="persona-card" onClick={() => onClick(persona)}>
-      <div className="card-avatar">
-        <img src={`/avatars/${getAvatarId(user_id)}.jpg`} alt={name} />
-        {is_elite && <div className="elite-badge">Elite</div>}
-      </div>
-      <div className="card-content">
-        <h3>{name}</h3>
-        <div className="card-stats">
-          <span>⭐ {avg_stars.toFixed(1)} Avg</span>
-          <span>•</span>
-          <span>{review_count} Reviews</span>
+    <div className={`persona-card ${isSelected ? 'selected' : ''}`} onClick={onClick}>
+      <div className="persona-card-inner">
+        <img className="pc-avatar" src={`/avatars/${getAvatarId(user_id)}.jpg`} alt={name} />
+        
+        <div className="pc-details">
+          <div className="pc-name">{name}</div>
+          <div className="pc-stats">
+            <span>⭐ {parseFloat(avg_stars).toFixed(1)} Avg</span>
+            <span>•</span>
+            <span>{review_count} Reviews</span>
+            {is_elite && <span className="pc-elite-badge">Elite</span>}
+          </div>
         </div>
       </div>
-      <div className="card-hover-overlay">
-        <span>Initialize Target →</span>
+      
+      {/* Modern Dynamic CTA Layer */}
+      <div className="pc-cta-layer">
+        <span>Select Profile &rarr;</span>
       </div>
     </div>
   );
