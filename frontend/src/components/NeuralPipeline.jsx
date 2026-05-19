@@ -8,6 +8,7 @@ export default function NeuralPipeline({ simulation, isLoading, errorStr, onComp
   const [directorText, setDirectorText] = useState('');
 
   useEffect(() => {
+    let timeouts = [];
     if (isLoading) {
       setStage(0);
       setActorText('');
@@ -22,48 +23,45 @@ export default function NeuralPipeline({ simulation, isLoading, errorStr, onComp
     }
 
     if (simulation && simulation.generator_log) {
-      let currentStage = 1;
       setStage(1);
       
-      const streamText = (textToStream, setter, onFinish) => {
-        let i = 0;
-        const interval = setInterval(() => {
-          if (i < textToStream.length) {
-            setter(prev => prev + textToStream.charAt(i));
-            i++;
-          } else {
-            clearInterval(interval);
-            onFinish();
-          }
-        }, 10);
+      const streamText = (text, setter, onFinish, delayOffset = 0) => {
+        for (let i = 0; i <= text.length; i++) {
+          const timeoutId = setTimeout(() => {
+            setter(text.slice(0, i));
+            if (i === text.length) {
+              onFinish();
+            }
+          }, delayOffset + i * 15);
+          timeouts.push(timeoutId);
+        }
+        return delayOffset + text.length * 15;
       };
 
       // Stage 1: The Actor
-      streamText(simulation.generator_log, setActorText, () => {
-        setStage(2);
+      let time = streamText(simulation.generator_log, setActorText, () => setStage(2), 0);
+      
+      // Stage 2: The Auditor
+      if (simulation.discriminator_log) {
+        time = streamText(simulation.discriminator_log, setAuditorText, () => setStage(3), time + 300);
         
-        // Stage 2: The Auditor
-        if (simulation.discriminator_log) {
-          streamText(simulation.discriminator_log, setAuditorText, () => {
-            setStage(3);
-            
-            // Stage 3: The Director
-            if (simulation.refiner_log) {
-              streamText(simulation.refiner_log, setDirectorText, () => {
-                setStage(4);
-                if (onComplete) onComplete();
-              });
-            } else {
-              setStage(4);
-              if (onComplete) onComplete();
-            }
-          });
+        // Stage 3: The Director
+        if (simulation.refiner_log) {
+          streamText(simulation.refiner_log, setDirectorText, () => {
+            setStage(4);
+            if (onComplete) onComplete();
+          }, time + 300);
         } else {
-          setStage(4);
-          if (onComplete) onComplete();
+          const t = setTimeout(() => { setStage(4); if (onComplete) onComplete(); }, time + 300);
+          timeouts.push(t);
         }
-      });
+      } else {
+        const t = setTimeout(() => { setStage(4); if (onComplete) onComplete(); }, time + 300);
+        timeouts.push(t);
+      }
     }
+    
+    return () => timeouts.forEach(clearTimeout);
   }, [simulation, isLoading, errorStr]);
 
   return (
