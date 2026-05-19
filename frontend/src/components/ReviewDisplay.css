@@ -1,13 +1,13 @@
 .tripadvisor-card {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-shadow: var(--shadow-card);
   animation: slideUpFadeIn 0.8s ease-out;
-  padding: 24px;
+  padding: 32px;
+  margin-bottom: 24px;
 }
 
 @keyframes slideUpFadeIn {
@@ -16,20 +16,21 @@
 }
 
 .ta-header {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .ta-user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .ta-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
   object-fit: cover;
+  background: var(--bg-main);
 }
 
 .ta-user-details {
@@ -38,14 +39,14 @@
 }
 
 .ta-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #000;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--text-primary);
 }
 
 .ta-contributions {
   font-size: 0.85rem;
-  color: #545454;
+  color: var(--text-secondary);
 }
 
 .ta-content {
@@ -57,7 +58,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .ta-stars {
@@ -67,64 +68,66 @@
 
 .ta-star {
   font-size: 1.2rem;
-  color: #e0e0e0;
+  color: var(--border-color);
 }
 
 .ta-star.filled {
-  color: #ffc107;
+  color: var(--warning-gold);
 }
 
 .ta-rating-value {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: #000;
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--text-primary);
   margin-left: 4px;
 }
 
 .ta-date {
   font-size: 0.85rem;
-  color: #545454;
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 
 .ta-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin: 0 0 12px 0;
-  color: #000;
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0 0 16px 0;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
 }
 
 .ta-body {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #000;
-  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-primary);
+  margin-bottom: 24px;
   white-space: pre-wrap;
 }
 
 .ta-date-visit {
   font-size: 0.9rem;
-  color: #000;
-  margin-bottom: 20px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  font-weight: 600;
 }
 
 .ta-footer {
-  border-top: 1px solid #e0e0e0;
-  padding-top: 16px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
 }
 
 .ta-helpful-btn {
   background: transparent;
-  border: 1px solid #000;
-  border-radius: 20px;
-  padding: 6px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 8px 20px;
   font-weight: 700;
   font-size: 0.85rem;
-  color: #000;
+  color: var(--text-primary);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s;
 }
 
 .ta-helpful-btn:hover {
-  background-color: #f2f2f2;
+  background-color: var(--bg-card-hover);
 }

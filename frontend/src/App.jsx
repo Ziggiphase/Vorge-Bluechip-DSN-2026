@@ -8,8 +8,9 @@ import './App.css';
 const API_BASE = '/api';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('pool'); // pool, taskB, taskA
+  const [activeTab, setActiveTab] = useState('home'); // home, pool, taskB, taskA
   const [personas, setPersonas] = useState([]);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   
   // Pool State
   const [selectedPersona, setSelectedPersona] = useState(null);
@@ -30,27 +31,23 @@ function App() {
   const [manualProduct, setManualProduct] = useState('');
   const [manualAttrs, setManualAttrs] = useState('');
   
-  // API Key Persistence
-  const [apiKey, setApiKey] = useState(localStorage.getItem('groq_api_key') || '');
-  const [showApiModal, setShowApiModal] = useState(!localStorage.getItem('groq_api_key'));
-  
+  useEffect(() => {
+    // Apply theme class to body
+    if (isDarkMode) {
+      document.body.classList.remove('light-theme');
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+      document.body.classList.add('light-theme');
+    }
+  }, [isDarkMode]);
+
   useEffect(() => {
     fetch(`${API_BASE}/users?limit=500`)
       .then(res => res.json())
       .then(data => setPersonas(data.users || []))
       .catch(err => console.error("Failed to fetch users", err));
   }, []);
-
-  const saveApiKey = () => {
-    if (apiKey) {
-      localStorage.setItem('groq_api_key', apiKey);
-      setShowApiModal(false);
-    }
-  };
-
-  const skipApiKey = () => {
-    setShowApiModal(false);
-  };
 
   const handleSelectPersona = async (p) => {
     setSelectedPersona(p);
@@ -62,8 +59,6 @@ function App() {
     setIsStreamingComplete(false);
 
     // Trigger Task B (Recommendations)
-    if (!apiKey) return;
-    
     setIsRecLoading(true);
     setRecommendations([]);
     setRecErrorStr('');
@@ -72,7 +67,7 @@ function App() {
       const response = await fetch(`${API_BASE}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: p.user_id, api_key: apiKey || '' })
+        body: JSON.stringify({ user_id: p.user_id, api_key: '' }) // Relies on server ENV
       });
       
       const data = await response.json();
@@ -93,6 +88,8 @@ function App() {
 
   const triggerSimulation = async (product_name, product_attrs) => {
     setActiveTab('taskA');
+    if (!selectedPersona || !product_name) return;
+    
     setIsSimLoading(true);
     setSimulation(null);
     setDna(null);
@@ -107,7 +104,7 @@ function App() {
           user_id: selectedPersona.user_id, 
           product_name: product_name,
           product_attributes: product_attrs,
-          api_key: apiKey || ''
+          api_key: '' // Relies on server ENV
         })
       });
       
@@ -141,60 +138,44 @@ function App() {
 
   return (
     <div className="app-container">
-      {showApiModal && (
-        <div className="api-modal-overlay">
-          <div className="api-modal">
-            <h2>Welcome to Vorge</h2>
-            <p>To use the Neural Pipeline, please enter your Groq API Key.</p>
-            <input 
-              type="password" 
-              placeholder="gsk_..."
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-            />
-            <div style={{display: 'flex', gap: '10px'}}>
-              <button onClick={saveApiKey} style={{flex: 1}}>Save & Start</button>
-              <button onClick={skipApiKey} style={{background: 'transparent', border: '1px solid #555', color: '#fff'}}>Skip (Use Server Key)</button>
-            </div>
-          </div>
+      {/* Top Navigation */}
+      <header className="top-nav">
+        <h1>Vorge.</h1>
+        <div className="nav-tabs">
+          <button className={`nav-tab ${activeTab === 'home' ? 'active' : ''}`} onClick={() => setActiveTab('home')}>Home</button>
+          <button className={`nav-tab ${activeTab === 'pool' ? 'active' : ''}`} onClick={() => setActiveTab('pool')}>The Mind Pool</button>
+          <button className={`nav-tab ${activeTab === 'taskB' ? 'active' : ''}`} onClick={() => setActiveTab('taskB')}>Recommender</button>
+          <button className={`nav-tab ${activeTab === 'taskA' ? 'active' : ''}`} onClick={() => setActiveTab('taskA')}>Simulator</button>
+        </div>
+        <button className="theme-toggle" onClick={() => setIsDarkMode(!isDarkMode)}>
+          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+      </header>
+
+      {/* Main Content Area */}
+      {activeTab === 'home' && (
+        <div className="home-hero">
+          <h1>Predict Human Behavior.</h1>
+          <p>
+            Vorge distills unstructured historical data into high-fidelity "Behavioral DNA". 
+            Our proprietary three-stage adversarial pipeline mathematically predicts how any 
+            human profile will react to completely unprecedented, cross-domain stimuli.
+          </p>
+          <button className="hero-btn" onClick={() => setActiveTab('pool')}>Explore The Mind Pool</button>
         </div>
       )}
-
-      <div className="top-nav">
-        <h1>Vorge</h1>
-        <div className="nav-tabs">
-          <button 
-            className={`nav-tab ${activeTab === 'pool' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pool')}
-          >
-            The Mind Pool
-          </button>
-          <button 
-            className={`nav-tab ${activeTab === 'taskB' ? 'active' : ''}`}
-            onClick={() => setActiveTab('taskB')}
-          >
-            Task B: Recommender
-          </button>
-          <button 
-            className={`nav-tab ${activeTab === 'taskA' ? 'active' : ''}`}
-            onClick={() => setActiveTab('taskA')}
-          >
-            Task A: Simulator
-          </button>
-        </div>
-      </div>
 
       {activeTab === 'pool' && (
         <div className="page-view">
           <div className="page-header">
             <h2>The Mind Pool</h2>
-            <p>Select a persona to trigger cross-domain recommendations.</p>
+            <p>Select a persona. We will extract their DNA to generate cross-domain product recommendations.</p>
           </div>
           
           <div className="pool-controls">
             <input 
               type="text" 
-              placeholder="Search 500 profiles..." 
+              placeholder="Search for a specific behavior profile..." 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -213,13 +194,12 @@ function App() {
           
           <div className="persona-grid">
             {filteredPersonas.map(p => (
-              <div 
+              <PersonaCard 
                 key={p.user_id} 
-                className={selectedPersona?.user_id === p.user_id ? 'persona-wrapper selected' : 'persona-wrapper'}
+                persona={p} 
+                isSelected={selectedPersona?.user_id === p.user_id}
                 onClick={() => handleSelectPersona(p)}
-              >
-                <PersonaCard persona={p} onClick={() => {}} />
-              </div>
+              />
             ))}
           </div>
         </div>
@@ -229,51 +209,58 @@ function App() {
         <div className="page-view">
           {!selectedPersona ? (
             <div className="empty-tab-state">
-              <span className="icon">🎯</span>
-              <h2>No Persona Selected</h2>
-              <p>Please select a Persona from the Mind Pool first to generate recommendations.</p>
-              <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Mind Pool</button>
+              <div className="icon">🧬</div>
+              <h2>Awaiting Subject</h2>
+              <p>Please select a human from the Mind Pool to generate tailored recommendations.</p>
+              <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Pool</button>
             </div>
           ) : (
-            <RecommendationEngine 
-              persona={selectedPersona}
-              recommendations={recommendations}
-              isLoading={isRecLoading}
-              errorStr={recErrorStr}
-              onSimulate={triggerSimulation}
-            />
+            <>
+              <div className="page-header">
+                <h2>Cross-Domain Recommender</h2>
+                <p>Analyzing behavioral vectors for {selectedPersona.name} to invent tailored products.</p>
+              </div>
+              <RecommendationEngine 
+                recommendations={recommendations} 
+                isLoading={isRecLoading}
+                errorStr={recErrorStr}
+                onSimulate={triggerSimulation}
+              />
+            </>
           )}
         </div>
       )}
 
       {activeTab === 'taskA' && (
-        <div className="page-view" style={{maxWidth: '800px'}}>
+        <div className="page-view" style={{maxWidth: '1000px', margin: '0 auto'}}>
           {!selectedPersona ? (
             <div className="empty-tab-state">
-              <span className="icon">🧪</span>
-              <h2>Simulation Console Offline</h2>
-              <p>Please select a Persona from the Mind Pool first to run the simulation.</p>
-              <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Mind Pool</button>
+              <div className="icon">🧠</div>
+              <h2>Awaiting Subject</h2>
+              <p>Please select a human from the Mind Pool to run a behavioral simulation.</p>
+              <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Pool</button>
             </div>
           ) : (
-            <div style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
-              <div className="page-header" style={{marginBottom: '0'}}>
-                <h2>Adversarial Simulation</h2>
-                <p>Target Persona: <strong>{selectedPersona.name}</strong></p>
+            <div className="simulation-console">
+              <div className="page-header">
+                <h2>Adversarial Simulator</h2>
+                <p>Target Subject: {selectedPersona.name}</p>
               </div>
 
               <div className="manual-input-box">
                 <input 
-                  placeholder="Test a custom product name..." 
-                  value={manualProduct}
-                  onChange={(e) => setManualProduct(e.target.value)}
+                  type="text" 
+                  placeholder="Custom Product Name" 
+                  value={manualProduct} 
+                  onChange={e => setManualProduct(e.target.value)} 
                 />
                 <input 
+                  type="text" 
                   placeholder="Attributes (Optional)" 
-                  value={manualAttrs}
-                  onChange={(e) => setManualAttrs(e.target.value)}
+                  value={manualAttrs} 
+                  onChange={e => setManualAttrs(e.target.value)} 
                 />
-                <button onClick={handleManualSimulate}>Run</button>
+                <button onClick={handleManualSimulate}>Run Simulation</button>
               </div>
 
               {isStreamingComplete && (
@@ -296,6 +283,18 @@ function App() {
           )}
         </div>
       )}
+
+      {/* Business Footer */}
+      <footer className="business-footer">
+        <div className="footer-brand">
+          <h3>Vorge.</h3>
+          <p>Designed by Team Ziggiphase.</p>
+        </div>
+        <div className="footer-contact">
+          <p><strong>WhatsApp:</strong> +2348117491902</p>
+          <p><strong>Email:</strong> bellobasit790@gmail.com</p>
+        </div>
+      </footer>
     </div>
   );
 }
