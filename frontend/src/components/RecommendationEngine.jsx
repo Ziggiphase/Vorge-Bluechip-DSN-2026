@@ -22,7 +22,6 @@ export default function RecommendationEngine({ persona, recommendations, isLoadi
   if (!persona) {
     return (
       <div className="recommender-empty">
-        <span className="icon">🎯</span>
         <p>Select a persona from the pool to generate dynamic cross-domain recommendations.</p>
       </div>
     );
@@ -47,7 +46,6 @@ export default function RecommendationEngine({ persona, recommendations, isLoadi
   if (errorStr) {
     return (
       <div className="recommender-error">
-        <span className="icon">⚠️</span>
         <p>{errorStr}</p>
       </div>
     );

@@ -223,6 +223,7 @@ function App() {
                 <p>Analyzing behavioral vectors for {selectedPersona.name} to invent tailored products.</p>
               </div>
               <RecommendationEngine 
+                persona={selectedPersona}
                 recommendations={recommendations} 
                 isLoading={isRecLoading}
                 errorStr={recErrorStr}
