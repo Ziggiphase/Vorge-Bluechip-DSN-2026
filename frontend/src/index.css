@@ -12,15 +12,15 @@
 
 body.light-theme {
   --bg-main: #FFFFFF;
-  --bg-card: #F6F6F6;
-  --bg-card-hover: #EEEEEE;
+  --bg-card: #F5F5F5;
+  --bg-card-hover: #E8E8E8;
   --bg-overlay: rgba(0,0,0,0.03);
   
-  --accent-primary: #000000;
+  --accent-primary: #D32323; /* Yelp Red */
   --accent-text: #FFFFFF;
   
-  --text-primary: #000000;
-  --text-secondary: #545454;
+  --text-primary: #333333;
+  --text-secondary: #666666;
   
   --border-color: #E2E2E2;
   
@@ -28,16 +28,16 @@ body.light-theme {
 }
 
 body.dark-theme {
-  --bg-main: #000000;
-  --bg-card: #121212;
-  --bg-card-hover: #222222;
+  --bg-main: #121212;
+  --bg-card: #1E1E1E;
+  --bg-card-hover: #2A2A2A;
   --bg-overlay: rgba(255,255,255,0.05);
   
-  --accent-primary: #FFFFFF;
-  --accent-text: #000000;
+  --accent-primary: #D32323; /* Yelp Red */
+  --accent-text: #FFFFFF;
   
   --text-primary: #FFFFFF;
-  --text-secondary: #A6A6A6;
+  --text-secondary: #AAAAAA;
   
   --border-color: #333333;
   

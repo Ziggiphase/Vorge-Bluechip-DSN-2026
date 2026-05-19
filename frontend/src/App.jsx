@@ -130,9 +130,9 @@ function App() {
     const matchesSearch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
     if (!matchesSearch) return false;
     
-    if (activeFilter === 'Elite') return p.is_elite;
-    if (activeFilter === 'Harsh') return parseFloat(p.avg_stars) < 3.0;
-    if (activeFilter === 'Optimist') return parseFloat(p.avg_stars) >= 4.0;
+    if (activeFilter === '> 50 Reviews') return parseInt(p.review_count) > 50;
+    if (activeFilter === '> 100 Reviews') return parseInt(p.review_count) > 100;
+    if (activeFilter === '> 500 Reviews') return parseInt(p.review_count) > 500;
     return true; // 'All'
   });
 
@@ -141,7 +141,7 @@ function App() {
       {/* Top Navigation */}
       <header className="top-nav">
         <div className="brand-logo">
-          <img src="/logo.png" alt="Vorge Logo" />
+          <img src="/logo.svg" alt="Vorge Logo" />
           <h1>Vorge.</h1>
         </div>
         <div className="nav-tabs">
@@ -183,7 +183,7 @@ function App() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <div className="filter-pills">
-              {['All', 'Elite', 'Harsh', 'Optimist'].map(f => (
+              {['All', '> 50 Reviews', '> 100 Reviews', '> 500 Reviews'].map(f => (
                 <button 
                   key={f} 
                   className={`filter-pill ${activeFilter === f ? 'active' : ''}`}
@@ -212,7 +212,6 @@ function App() {
         <div className="page-view">
           {!selectedPersona ? (
             <div className="empty-tab-state">
-              <div className="icon">🧬</div>
               <h2>Awaiting Subject</h2>
               <p>Please select a human from the Mind Pool to generate tailored recommendations.</p>
               <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Pool</button>
@@ -238,7 +237,6 @@ function App() {
         <div className="page-view" style={{maxWidth: '1000px', margin: '0 auto'}}>
           {!selectedPersona ? (
             <div className="empty-tab-state">
-              <div className="icon">🧠</div>
               <h2>Awaiting Subject</h2>
               <p>Please select a human from the Mind Pool to run a behavioral simulation.</p>
               <button className="btn-goto-pool" onClick={() => setActiveTab('pool')}>Go to Pool</button>
@@ -291,7 +289,7 @@ function App() {
       <footer className="business-footer">
         <div className="footer-col">
           <div className="brand-logo" style={{marginBottom: '16px'}}>
-            <img src="/logo.png" alt="Vorge Logo" />
+            <img src="/logo.svg" alt="Vorge Logo" />
             <h3>Vorge.</h3>
           </div>
           <p>Predictive Human Emulation for the Modern Enterprise.</p>

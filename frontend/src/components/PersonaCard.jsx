@@ -22,7 +22,7 @@ export default function PersonaCard({ persona, isSelected, onClick }) {
         <div className="pc-details">
           <div className="pc-name">{name}</div>
           <div className="pc-stats">
-            <span>⭐ {parseFloat(avg_stars).toFixed(1)} Avg</span>
+            <span>{parseFloat(avg_stars).toFixed(1)} Avg</span>
             <span>•</span>
             <span>{review_count} Reviews</span>
             {is_elite && <span className="pc-elite-badge">Elite</span>}
